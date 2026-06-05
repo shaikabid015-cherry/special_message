@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This is for you Luckyy...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            z-index: -1;
+        }
+
+        .card {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* Paragraph 1 container */
+        .para1 {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            margin-bottom: 1.8rem;
+            color: #1e2a3a;
+            background: #fff9ef;
+            border-radius: 1rem;
+            padding: 1rem 1.2rem;
+            border-left: 5px solid #ff7b00;
+            min-height: 150px;
+        }
+
+        /* The special link (styled) */
+        .memory-link {
+            display: inline-block;
+            font-weight: bold;
+            color: #c4450c;
+            background: #ffe6d5;
+            padding: 0.4rem 1rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-size: 1rem;
+            margin-top: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            animation: gentlePulse 1.5s infinite, wiggle 2s infinite;
+        }
+
+        @keyframes gentlePulse {
+            0% { box-shadow: 0 0 0 0 rgba(196, 69, 12, 0.5);}
+            70% { box-shadow: 0 0 0 10px rgba(196, 69, 12, 0);}
+            100% { box-shadow: 0 0 0 0 rgba(196, 69, 12, 0);}
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg);}
+            25% { transform: rotate(2deg);}
+            75% { transform: rotate(-2deg);}
+        }
+
+        .memory-link:hover {
+            background: #ffb77c;
+            transform: scale(1.02);
+        }
+
+        /* Paragraph 2 */
+        .para2 {
+            font-size: 1.2rem;
+            background: rgba(255,250,240,0.95);
+            padding: 1rem 1.2rem;
+            border-radius: 1.2rem;
+            margin: 1.5rem 0;
+            color: #2c3e2f;
+            border-right: 4px solid #ffaa33;
+        }
+
+        /* Question area */
+        .question-area {
+            background: #fff0e0;
+            padding: 1.2rem;
+            border-radius: 2rem;
+            text-align: center;
+            margin: 1.8rem 0;
+        }
+
+        .question-text {
+            font-size: 1.9rem;
+            font-weight: bold;
+            color: #b13e00;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .study-img {
+            max-width: 80px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Floating reminder (always visible until link clicked) */
+        .floating-reminder {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c1a0c;
+            color: #ffdd99;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            z-index: 1000;
+            border-left: 5px solid #ffaa33;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-20px);}
+            to { opacity: 1; transform: translateX(0);}
+        }
+
+        /* Modal for paragraph 3 (popup when link clicked) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: #fff7ec;
+            max-width: 450px;
+            width: 85%;
+            max-height: 80vh;          /* ← 80% of viewport height */
+            overflow-y: auto;          /* ← enables vertical scrollbar */
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;      /* ← slightly less padding to fit more text */
+            text-align: center;
+            border-top: 8px solid #ffaa33;
+            animation: bounce 0.3s ease;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0.9); opacity: 0;}
+            100% { transform: scale(1); opacity: 1;}
+        }
+
+        .modal-content h3 {
+            font-size: 2rem;
+            color: #d45500;
+        }
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1e9db;
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #ff914d;
+            border-radius: 10px;
+        }
+        .bold-highlight {
+            background: #ffeaac;
+            font-weight: bold;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+
+        .close-modal {
+            background: #ff914d;
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        /* Custom back-button popup (appears every time!) */
+        .back-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .back-popup-content {
+            background: #fff2e0;
+            max-width: 400px;
+            border-radius: 2rem;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 6px solid #ff7b00;
+        }
+
+        .back-popup-content p {
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .back-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-buttons button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-open {
+            background: #ff914d;
+            color: white;
+        }
+
+        .btn-ok {
+            background: #ccc;
+            color: #333;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #4a3a2a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <!-- PARAGRAPH 1 – typewriter will fill this -->
+    <div class="para1" id="para1Container"></div>
+
+    <!-- PARAGRAPH 2 – EDIT YOUR TEXT HERE -->
+    <div class="para2" id="paragraph2">
+Em ledu just chaduvuthunnava leda ani adagadaniki idi create chesa...Bagundaa??<br><br>
+gate crack chestav ani fix ayyav ga soo...<br><br>
+Trips ,outings ivvani nv crack chesaka ayna velavachu but ippudu crack chesta ani gattiga anukunnav ga so try hard...Idi nen matrame kadu neelima kuda chala sarlu cheppedi...<br><br>
+
+
+
+Nv stage meeda prize tesukunetappudu aravali(shouting) ani fix ayyam so dont break our hope🤭😅.<br><br>
+
+<b>If u are feeling low then reach out to neelima or me or ur close friends ...ante kani lopala lopale alochistu undipoku...<br><br></b>
+
+Ila anthunna ani tappuga anukoku but listen,"U r the only child of ur parents so <b>Make them proud</b>"<br></s><br>
+
+I know u r talented ,having a great general knowledge & social knowledge..just reminding u🙃<br><br>
+
+<h3>Niku evaru leru anukoku...Neelima is there who always thinks about u...Only thing was just listen to her ,she definetely won't be anti to you</h3><br><br>
+
+And niku chepta anna ga ,last msg lo ,adhi campus ki vachaka chepta,just gurtu chey <small><i>(if u are intrested,it's about u only)</small></i><br> 
+and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok...<br><br>
+
+<strong>And one last and imp request naku nee anta general knowledge ledu and news&notifications kuda follow avvanu so ee exams aina(like govt. ,railways, psu's ,barc ,etc etc) notifications padithe just tell us...idhi marchipoku </strong>
+<br><br>
+<h2>and take care!</h2>
+    </div>
+
+    <!-- Question area with study image -->
+    <div class="question-area">
+        <div class="question-text">
+            So,Are you 
+            <img src="study.jpg" alt="studying" class="study-img" id="studyImage">
+            ing...
+            <span>?</span>
+        </div>
+        <div style="margin-top: 8px; font-size:0.9rem; color:#b45f2b;">✨ (the glowing link above is waiting for you) ✨</div>
+    </div>
+
+    <footer><strong>Reply 🍒, if you want</strong></footer>
+</div>
+
+<!-- Floating reminder (visible until link clicked) -->
+<div id="floatingReminder" class="floating-reminder">
+    💖 Click "please remember our chat" above 💖
+</div>
+
+<!-- Modal for paragraph 3 (after clicking link) -->
+<div id="specialModal" class="modal">
+    <div class="modal-content">
+        <h3>📜 our little Convo</h3>
+        <p>
+            <span class="bold-highlight">✨ Read Once ✨</span><br>
+            <strong>Do u really READ on that day?</strong> <br><br>
+            <p style="white-space: pre-line;">
+            🙂 <em>"Mrng niku okati chepdam ani kaludam anna
+                Em ledu 
+                neelima eppudu cheptu undedi about ur effort and consistency  in gate.
+                Anta perfect ga chadavakapoina kasta bane try chesav ala cheppedi
+
+                But when I see u in that gate exam and finsara nyt I saw ur eyes & get to know ur intrest towards it....
+
+                <mark>Naku idhi cheppe right undo ledo idk but still saying</mark>
+                Ee two months kasta baga chaduvu 
+                Nv chaduvuthav I know
+
+                Time waste cheyaku naa laga ee two months
+
+                Inka trip antava adhi niku eppudu kudirithe appude mem ready 
+                And u already know nv rank kodithe inka ninnu aapevalu evaru undaru
+
+                So waste cheyakunda chaduvu
+
+                and neelima, nv vache laga chala trips plan chestundi 
+                But niku avvadu ...i know ur situation...sarle edi emaina first rank kottu
+
+                appudu psu vaste nee salary thone maaku trip...
+                (appatiki maatho untavo vadhilestavo telidu le)
+
+                Sarle trip workout aithe aa kalla👀 ammai evaro chepesta (naku avasaram ledu antav,edo urike saying)
+
+                and forget about ur past (ante intiki velthe gurtu vastundi antav ga anudke)
+                dont forget to call when ur low...Niku evaru leru anukoku manchi frds ee unnaru and eppudu sad ga undaku
+
+                and inko imp vishyam niku cheppali about urself only kani ippudu kaduuu"</em> <br><br>
+            🙃 <strong style="background:#fff0b5;">Once watch out this reel: <br><a href="">https://www.instagram.com/reels/DZH62HZpydg/</a><br><br></strong></p>
+</strong>
+        </p>
+        <button class="close-modal" id="closeModalBtn">Keep reading</button>
+    </div>
+</div>
+
+<!-- Custom back popup – appears EVERY time they press back -->
+<div id="backPopup" class="back-popup">
+    <div class="back-popup-content">
+        <p>⚠️ <strong>Wait!</strong> ⚠️</p>
+        <p>You haven't opened the special message yet.<br>
+        It's called <strong>"please remember our chat"</strong> (the glowing link above).</p>
+        <div class="back-buttons">
+            <button id="backOpenMsgBtn" class="btn-open">✨ Open the message ✨</button>
+            <button id="backOkBtn" class="btn-ok">OK, stay here</button>
+        </div>
+    </div>
+</div>
+<script>
+    // --------------------------------------------------------------
+    // 1. TYPEWRITER EFFECT for Paragraph 1 (proper HTML handling)
+    // --------------------------------------------------------------
+    const para1Container = document.getElementById('para1Container');
+    
+    // The text that will be typed (without the link)
+    const textBeforeLink = "Hii, I just created this to remind you and ask how you're doing. Are you studying or not? 😄\n\n Don't forget the things you told me before, and remember our last conversation too.\n\n Don't forget about the silly trips we planned🤭\n\n Just checking in and hoping you're staying focused. Take care!\n\n If u r feeling low don't suffocate alone ";
+    
+    let charIndex = 0;
+    
+    function typeNextChar() {
+        if (charIndex < textBeforeLink.length) {
+            let currentChar = textBeforeLink.charAt(charIndex);
+            // Convert newline to <br>
+            if (currentChar === '\n') {
+                para1Container.innerHTML += '<br>';
+            } else {
+                para1Container.innerHTML += currentChar;
+            }
+            charIndex++;
+            setTimeout(typeNextChar, 45);
+        } else {
+            // Text finished – now create and append the link element
+            addLinkToParagraph();
+        }
+    }
+    
+    function addLinkToParagraph() {
+        // Create the link span
+        const linkSpan = document.createElement('span');
+        linkSpan.className = 'memory-link';
+        linkSpan.id = 'dynamicMemoryLink';
+        linkSpan.textContent = '✨ please remember our chat ✨';
+        
+        // Add click event
+        linkSpan.addEventListener('click', (e) => {
+            e.preventDefault();
+            showModal();
+        });
+        
+        // Append to paragraph container
+        para1Container.appendChild(linkSpan);
+        
+        // Also add a small line break before link? Already fine
+    }
+    
+    // Start typewriter on load
+    window.addEventListener('DOMContentLoaded', () => {
+        para1Container.innerHTML = ''; // clear
+        typeNextChar();
+    });
+    
+    // --------------------------------------------------------------
+    // 2. MODAL (paragraph 3) and link-clicked flag
+    // --------------------------------------------------------------
+    let clickedMemoryLink = false;  // only used for floating reminder and beforeunload
+    const modal = document.getElementById('specialModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const floatingReminder = document.getElementById('floatingReminder');
+    
+    function showModal() {
+        modal.style.display = 'flex';
+        clickedMemoryLink = true;
+        // Hide floating reminder permanently
+        if (floatingReminder) floatingReminder.style.display = 'none';
+    }
+    
+    function closeModalFunc() {
+        modal.style.display = 'none';
+    }
+    
+    closeModalBtn.addEventListener('click', closeModalFunc);
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModalFunc();
+    });
+    
+    // --------------------------------------------------------------
+    // 3. BACK BUTTON POPUP – APPEARS EVERY TIME (even after link clicked)
+    // --------------------------------------------------------------
+    const backPopup = document.getElementById('backPopup');
+    const backOpenMsgBtn = document.getElementById('backOpenMsgBtn');
+    const backOkBtn = document.getElementById('backOkBtn');
+    
+    // Push a dummy state to catch back button
+    history.pushState(null, null, location.href);
+    
+    function showBackPopupAlways() {
+        backPopup.style.display = 'flex';
+        // Push another state so that pressing back again doesn't navigate away immediately
+        history.pushState(null, null, location.href);
+    }
+    
+    function hideBackPopup() {
+        backPopup.style.display = 'none';
+    }
+    
+    // When user clicks "Open the message" from back popup
+    backOpenMsgBtn.addEventListener('click', () => {
+        // Simulate clicking the memory link
+        const link = document.getElementById('dynamicMemoryLink');
+        if (link) {
+            link.click();
+        } else {
+            // fallback: directly show modal
+            showModal();
+        }
+        hideBackPopup();
+    });
+    
+    // When user clicks "OK, stay here"
+    backOkBtn.addEventListener('click', () => {
+        hideBackPopup();
+    });
+    
+    // Detect back button via popstate – show popup EVERY TIME regardless of clickedMemoryLink
+    window.addEventListener('popstate', function(event) {
+        showBackPopupAlways();
+    });
+    
+    // --------------------------------------------------------------
+    // 4. BEFOREUNLOAD – ALWAYS show warning (even after link clicked)
+    // --------------------------------------------------------------
+    window.addEventListener('beforeunload', (event) => {
+        // Always show a reminder, even if they already clicked the link
+        const message = "💖 Don't leave without reading the special message one more time? Stay a little longer?";
+        event.preventDefault();
+        event.returnValue = message;
+        return message;
+    });
+    
+    // --------------------------------------------------------------
+    // 5. EXTRA: highlight floating reminder when mouse leaves top
+    // --------------------------------------------------------------
+    document.addEventListener('mouseleave', (e) => {
+        if (e.clientY <= 0 && floatingReminder && floatingReminder.style.display !== 'none') {
+            floatingReminder.style.animation = 'none';
+            floatingReminder.style.backgroundColor = '#ff6600';
+            floatingReminder.style.color = 'white';
+            setTimeout(() => {
+                if(floatingReminder) floatingReminder.style.backgroundColor = '#2c1a0c';
+            }, 500);
+        }
+    });
+    
+    console.log("Ready — back popup will appear every time you press back, and beforeunload always asks.");
+</script>
+
+<!-- 
+    ========== HOW TO CUSTOMIZE ==========
+    1. Background image: replace 'background.jpg' in <style> (line 20)
+    2. Study image: replace 'study.jpg' in <img> (line 173)
+    3. Paragraph 2 text: edit inside <div class="para2"> (line 158-160)
+    4. Paragraph 3 (popup): edit inside <div id="specialModal"> (line 205-215)
+    5. The typewriter text for Paragraph 1 is defined in the variable 'textBeforeLink' (line 265). Edit that string.
+    
+    To deploy: upload index.html + your two images to Netlify/GitHub Pages.
+-->
