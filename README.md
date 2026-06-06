@@ -1,7 +1,7 @@
 # Lucky_Asking – A Personal Interactive Message Website
 
-**Live URL:** [your-vercel-link.vercel.app]  
-**GitHub:** [github.com/yourusername/lucky-asking]
+**Live URL:** [---not deployed yet---]  
+**GitHub:** [github.com/shaikabid015-cherry/special-message]
 
 ## Overview
 A single‑page HTML/CSS/JS website designed to deliver a heartfelt, interactive message to a special person. It combines nostalgic typewriter animation, custom modals, persistent exit‑intent reminders, and a back‑button override to ensure the message is seen.
