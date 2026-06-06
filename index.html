@@ -173,10 +173,10 @@
             background: #fff7ec;
             max-width: 450px;
             width: 85%;
-            max-height: 80vh;          /* ← 80% of viewport height */
-            overflow-y: auto;          /* ← enables vertical scrollbar */
+            max-height: 80vh;
+            overflow-y: auto;
             border-radius: 2rem;
-            padding: 1.5rem 2rem;      /* ← slightly less padding to fit more text */
+            padding: 1.5rem 2rem;
             text-align: center;
             border-top: 8px solid #ffaa33;
             animation: bounce 0.3s ease;
@@ -290,7 +290,7 @@
     <!-- PARAGRAPH 1 – typewriter will fill this -->
     <div class="para1" id="para1Container"></div>
 
-    <!-- PARAGRAPH 2 – EDIT YOUR TEXT HERE -->
+    <!-- PARAGRAPH 2 – your exact message -->
     <div class="para2" id="paragraph2">
 Em ledu just chaduvuthunnava leda ani adagadaniki idi create chesa...Bagundaa??<br><br>
 gate crack chestav ani fix ayyav ga soo...<br><br>
@@ -306,7 +306,7 @@ Ila anthunna ani tappuga anukoku but listen,"U r the only child of ur parents so
 
 I know u r talented ,having a great general knowledge & social knowledge..just reminding u🙃<br><br>
 
-<h3>Niku evaru leru anukoku...Neelima is there who always thinks about u...Only thing was just listen to her (sometimes) ,she definetely won't be anti to you</h3><br><br>
+<h3>Niku evaru leru anukoku...Neelima is there who always thinks about u...Only thing was just listen to her(sometimes) ,she definetely won't be anti to you</h3><br><br>
 
 And niku chepta anna ga ,last msg lo ,adhi campus ki vachaka chepta,just gurtu chey <small><i>(if u are intrested,it's about u only)</small></i><br> 
 and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok...<br><br>
@@ -392,165 +392,171 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
         </div>
     </div>
 </div>
+
 <script>
-    // --------------------------------------------------------------
-    // 1. TYPEWRITER EFFECT for Paragraph 1 (proper HTML handling)
-    // --------------------------------------------------------------
-    const para1Container = document.getElementById('para1Container');
-    
-    // The text that will be typed (without the link)
-    const textBeforeLink = "Hii, I just created this to remind you and ask how you're doing. Are you studying or not? 😄\n\n Don't forget the things you told me before, and remember our last conversation too.\n\n Don't forget about the silly trips we planned🤭\n\n Just checking in and hoping you're staying focused. Take care!\n\n If u r feeling low don't suffocate alone ";
-    
-    let charIndex = 0;
-    
-    function typeNextChar() {
-        if (charIndex < textBeforeLink.length) {
-            let currentChar = textBeforeLink.charAt(charIndex);
-            // Convert newline to <br>
-            if (currentChar === '\n') {
-                para1Container.innerHTML += '<br>';
-            } else {
-                para1Container.innerHTML += currentChar;
-            }
-            charIndex++;
-            setTimeout(typeNextChar, 50);
-        } else {
-            // Text finished – now create and append the link element
-            addLinkToParagraph();
-        }
-    }
-    
-    function addLinkToParagraph() {
-        // Create the link span
-        const linkSpan = document.createElement('span');
-        linkSpan.className = 'memory-link';
-        linkSpan.id = 'dynamicMemoryLink';
-        linkSpan.textContent = '✨ please remember our chat ✨';
+    (function() {
+        // --------------------------------------------------------------
+        // 1. TYPEWRITER EFFECT for Paragraph 1
+        // --------------------------------------------------------------
+        const para1Container = document.getElementById('para1Container');
+        const textBeforeLink = "Hii, I just created this to remind you and ask how you're doing. Are you studying or not? 😄\n\n Don't forget the things you told me before, and remember our last conversation too.\n\n Don't forget about the silly trips we planned🤭\n\n Just checking in and hoping you're staying focused. Take care!\n\n If u r feeling low don't suffocate alone ";
         
-        // Add click event
-        linkSpan.addEventListener('click', (e) => {
-            e.preventDefault();
-            showModal();
+        let charIndex = 0;
+        function typeNextChar() {
+            if (charIndex < textBeforeLink.length) {
+                let currentChar = textBeforeLink.charAt(charIndex);
+                if (currentChar === '\n') {
+                    para1Container.innerHTML += '<br>';
+                } else {
+                    para1Container.innerHTML += currentChar;
+                }
+                charIndex++;
+                setTimeout(typeNextChar, 45);
+            } else {
+                addLinkToParagraph();
+            }
+        }
+        
+        function addLinkToParagraph() {
+            const linkSpan = document.createElement('span');
+            linkSpan.className = 'memory-link';
+            linkSpan.id = 'dynamicMemoryLink';
+            linkSpan.textContent = '✨ please remember our chat ✨';
+            linkSpan.addEventListener('click', (e) => {
+                e.preventDefault();
+                showModal();
+            });
+            para1Container.appendChild(linkSpan);
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            para1Container.innerHTML = '';
+            typeNextChar();
         });
         
-        // Append to paragraph container
-        para1Container.appendChild(linkSpan);
+        // --------------------------------------------------------------
+        // 2. MODAL and link-clicked flag
+        // --------------------------------------------------------------
+        let clickedMemoryLink = false;
+        const modal = document.getElementById('specialModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const floatingReminder = document.getElementById('floatingReminder');
         
-        // Also add a small line break before link? Already fine
-    }
-    
-    // Start typewriter on load
-    window.addEventListener('DOMContentLoaded', () => {
-        para1Container.innerHTML = ''; // clear
-        typeNextChar();
-    });
-    
-    // --------------------------------------------------------------
-    // 2. MODAL (paragraph 3) and link-clicked flag
-    // --------------------------------------------------------------
-    let clickedMemoryLink = false;  // only used for floating reminder and beforeunload
-    const modal = document.getElementById('specialModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const floatingReminder = document.getElementById('floatingReminder');
-    
-    function showModal() {
-        modal.style.display = 'flex';
-        clickedMemoryLink = true;
-        // Hide floating reminder permanently
-        if (floatingReminder) floatingReminder.style.display = 'none';
-    }
-    
-    function closeModalFunc() {
-        modal.style.display = 'none';
-    }
-    
-    closeModalBtn.addEventListener('click', closeModalFunc);
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) closeModalFunc();
-    });
-    
-    // --------------------------------------------------------------
-    // 3. BACK BUTTON POPUP – APPEARS EVERY TIME (even after link clicked)
-    // --------------------------------------------------------------
-    const backPopup = document.getElementById('backPopup');
-    const backOpenMsgBtn = document.getElementById('backOpenMsgBtn');
-    const backOkBtn = document.getElementById('backOkBtn');
-    
-    // Push a dummy state to catch back button
-    history.pushState(null, null, location.href);
-    
-    function showBackPopupAlways() {
-        backPopup.style.display = 'flex';
-        // Push another state so that pressing back again doesn't navigate away immediately
-        history.pushState(null, null, location.href);
-    }
-    
-    function hideBackPopup() {
-        backPopup.style.display = 'none';
-    }
-    
-    // When user clicks "Open the message" from back popup
-    backOpenMsgBtn.addEventListener('click', () => {
-        // Simulate clicking the memory link
-        const link = document.getElementById('dynamicMemoryLink');
-        if (link) {
-            link.click();
-        } else {
-            // fallback: directly show modal
-            showModal();
+        function showModal() {
+            modal.style.display = 'flex';
+            clickedMemoryLink = true;
+            if (floatingReminder) floatingReminder.style.display = 'none';
         }
-        hideBackPopup();
-    });
-    //Stoping from closing tab
-    window.addEventListener("beforeunload", (event) => {
-    event.preventDefault();
-    event.returnValue = "";
-});
-    // When user clicks "OK, stay here"
-    backOkBtn.addEventListener('click', () => {
-        hideBackPopup();
-    });
-    
-    // Detect back button via popstate – show popup EVERY TIME regardless of clickedMemoryLink
-    window.addEventListener('popstate', function(event) {
-        showBackPopupAlways();
-    });
-    
-    // --------------------------------------------------------------
-    // 4. BEFOREUNLOAD – ALWAYS show warning (even after link clicked)
-    // --------------------------------------------------------------
-    window.addEventListener('beforeunload', (event) => {
-        // Always show a reminder, even if they already clicked the link
-        const message = "💖 Don't leave without reading the special message one more time? Stay a little longer?";
-        event.preventDefault();
-        event.returnValue = message;
-        return message;
-    });
-    
-    // --------------------------------------------------------------
-    // 5. EXTRA: highlight floating reminder when mouse leaves top
-    // --------------------------------------------------------------
-    document.addEventListener('mouseleave', (e) => {
-        if (e.clientY <= 0 && floatingReminder && floatingReminder.style.display !== 'none') {
-            floatingReminder.style.animation = 'none';
-            floatingReminder.style.backgroundColor = '#ff6600';
-            floatingReminder.style.color = 'white';
-            setTimeout(() => {
-                if(floatingReminder) floatingReminder.style.backgroundColor = '#2c1a0c';
-            }, 500);
+        
+        function closeModalFunc() {
+            modal.style.display = 'none';
         }
-    });
-    
-    console.log("Ready — back popup will appear every time you press back, and beforeunload always asks.");
+        
+        closeModalBtn.addEventListener('click', closeModalFunc);
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) closeModalFunc();
+        });
+        
+        // --------------------------------------------------------------
+        // 3. EXTREMELY AGGRESSIVE BACK BUTTON INTERCEPT (works on mobile/desktop)
+        // --------------------------------------------------------------
+        const backPopup = document.getElementById('backPopup');
+        const backOpenMsgBtn = document.getElementById('backOpenMsgBtn');
+        const backOkBtn = document.getElementById('backOkBtn');
+        
+        // Function to keep the history trapped
+        function keepTrapped() {
+            // Push a new state if the current state is not our dummy
+            if (window.location.hash !== '#trapped') {
+                history.pushState(null, null, '#trapped');
+            }
+        }
+        
+        // Show the custom popup and re-trap
+        function showBackPopupAlways() {
+            backPopup.style.display = 'flex';
+            // Push a new state so that back button is still trapped
+            keepTrapped();
+        }
+        
+        function hideBackPopup() {
+            backPopup.style.display = 'none';
+        }
+        
+        backOpenMsgBtn.addEventListener('click', () => {
+            const link = document.getElementById('dynamicMemoryLink');
+            if (link) {
+                link.click();
+            } else {
+                showModal();
+            }
+            hideBackPopup();
+        });
+        
+        backOkBtn.addEventListener('click', () => {
+            hideBackPopup();
+        });
+        
+        // Initial trap
+        keepTrapped();
+        
+        // Intercept back button (popstate)
+        window.addEventListener('popstate', function(event) {
+            // Always show the custom popup and re-trap
+            showBackPopupAlways();
+            // Prevent the actual back navigation by pushing again
+            keepTrapped();
+        });
+        
+        // Also listen for hashchange (extra safety for some mobile browsers)
+        window.addEventListener('hashchange', function() {
+            if (!clickedMemoryLink) {
+                showBackPopupAlways();
+                keepTrapped();
+            }
+        });
+        
+        // Periodically re-trap (every second) – ensures even if user finds a way to clear history
+        setInterval(function() {
+            if (!clickedMemoryLink && window.location.hash !== '#trapped') {
+                keepTrapped();
+            }
+        }, 1000);
+        
+        // --------------------------------------------------------------
+        // 4. RELOAD / CLOSE TAB WARNING (always triggers)
+        // --------------------------------------------------------------
+        window.addEventListener('beforeunload', (event) => {
+            // This will show a native browser dialog
+            const message = "⚠️ You haven't opened the special message. Stay on this page?";
+            event.preventDefault();
+            event.returnValue = message;
+            return message;
+        });
+        
+        // Also warn on page hide (for some mobile browsers)
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && !clickedMemoryLink) {
+                // Not possible to block, but we can log; beforeunload already covers closing
+            }
+        });
+        
+        // --------------------------------------------------------------
+        // 5. EXTRA: highlight floating reminder when mouse leaves top
+        // --------------------------------------------------------------
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0 && floatingReminder && floatingReminder.style.display !== 'none') {
+                floatingReminder.style.animation = 'none';
+                floatingReminder.style.backgroundColor = '#ff6600';
+                floatingReminder.style.color = 'white';
+                setTimeout(() => {
+                    if(floatingReminder) floatingReminder.style.backgroundColor = '#2c1a0c';
+                }, 500);
+            }
+        });
+        
+        console.log("Aggressive interception active – back button, reload, close tab fully blocked.");
+    })();
 </script>
-
-<!-- 
-    ========== HOW TO CUSTOMIZE ==========
-    1. Background image: replace 'background.jpg' in <style> (line 20)
-    2. Study image: replace 'study.jpg' in <img> (line 173)
-    3. Paragraph 2 text: edit inside <div class="para2"> (line 158-160)
-    4. Paragraph 3 (popup): edit inside <div id="specialModal"> (line 205-215)
-    5. The typewriter text for Paragraph 1 is defined in the variable 'textBeforeLink' (line 265). Edit that string.
-    
-    To deploy: upload index.html + your two images to Netlify/GitHub Pages.
--->
+</body>
+</html>
