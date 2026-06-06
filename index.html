@@ -306,7 +306,7 @@ Ila anthunna ani tappuga anukoku but listen,"U r the only child of ur parents so
 
 I know u r talented ,having a great general knowledge & social knowledge..just reminding u🙃<br><br>
 
-<h3>Niku evaru leru anukoku...Neelima is there who always thinks about u...Only thing was just listen to her (sometimes),she definetely won't be anti to you</h3><br><br>
+<h3>Niku evaru leru anukoku...Neelima is there who always thinks about u...Only thing was just listen to her(sometimes) ,she definetely won't be anti to you</h3><br><br>
 
 And niku chepta anna ga ,last msg lo ,adhi campus ki vachaka chepta,just gurtu chey <small><i>(if u are intrested,it's about u only)</small></i><br> 
 and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok...<br><br>
@@ -394,11 +394,10 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
 </div>
 <script>
     // --------------------------------------------------------------
-    // 1. TYPEWRITER EFFECT for Paragraph 1 (proper HTML handling)
+    // 1. TYPEWRITER EFFECT for Paragraph 1
     // --------------------------------------------------------------
     const para1Container = document.getElementById('para1Container');
     
-    // The text that will be typed (without the link)
     const textBeforeLink = "Hii, I just created this to remind you and ask how you're doing. Are you studying or not? 😄\n\n Don't forget the things you told me before, and remember our last conversation too.\n\n Don't forget about the silly trips we planned🤭\n\n Just checking in and hoping you're staying focused. Take care!\n\n If u r feeling low don't suffocate alone ";
     
     let charIndex = 0;
@@ -406,7 +405,6 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
     function typeNextChar() {
         if (charIndex < textBeforeLink.length) {
             let currentChar = textBeforeLink.charAt(charIndex);
-            // Convert newline to <br>
             if (currentChar === '\n') {
                 para1Container.innerHTML += '<br>';
             } else {
@@ -415,40 +413,33 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
             charIndex++;
             setTimeout(typeNextChar, 45);
         } else {
-            // Text finished – now create and append the link element
             addLinkToParagraph();
         }
     }
     
     function addLinkToParagraph() {
-        // Create the link span
         const linkSpan = document.createElement('span');
         linkSpan.className = 'memory-link';
         linkSpan.id = 'dynamicMemoryLink';
         linkSpan.textContent = '✨ please remember our chat ✨';
         
-        // Add click event
         linkSpan.addEventListener('click', (e) => {
             e.preventDefault();
             showModal();
         });
         
-        // Append to paragraph container
         para1Container.appendChild(linkSpan);
-        
-        // Also add a small line break before link? Already fine
     }
     
-    // Start typewriter on load
     window.addEventListener('DOMContentLoaded', () => {
-        para1Container.innerHTML = ''; // clear
+        para1Container.innerHTML = '';
         typeNextChar();
     });
     
     // --------------------------------------------------------------
-    // 2. MODAL (paragraph 3) and link-clicked flag
+    // 2. MODAL and link-clicked flag
     // --------------------------------------------------------------
-    let clickedMemoryLink = false;  // only used for floating reminder and beforeunload
+    let clickedMemoryLink = false;
     const modal = document.getElementById('specialModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const floatingReminder = document.getElementById('floatingReminder');
@@ -456,7 +447,6 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
     function showModal() {
         modal.style.display = 'flex';
         clickedMemoryLink = true;
-        // Hide floating reminder permanently
         if (floatingReminder) floatingReminder.style.display = 'none';
     }
     
@@ -470,18 +460,18 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
     });
     
     // --------------------------------------------------------------
-    // 3. BACK BUTTON POPUP – APPEARS EVERY TIME (even after link clicked)
+    // 3. STRONG BACK BUTTON INTERCEPT (works everywhere)
     // --------------------------------------------------------------
     const backPopup = document.getElementById('backPopup');
     const backOpenMsgBtn = document.getElementById('backOpenMsgBtn');
     const backOkBtn = document.getElementById('backOkBtn');
     
-    // Push a dummy state to catch back button
+    // Push an initial dummy state
     history.pushState(null, null, location.href);
     
     function showBackPopupAlways() {
         backPopup.style.display = 'flex';
-        // Push another state so that pressing back again doesn't navigate away immediately
+        // Push another state so that the back button remains trapped
         history.pushState(null, null, location.href);
     }
     
@@ -489,39 +479,38 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
         backPopup.style.display = 'none';
     }
     
-    // When user clicks "Open the message" from back popup
     backOpenMsgBtn.addEventListener('click', () => {
-        // Simulate clicking the memory link
         const link = document.getElementById('dynamicMemoryLink');
         if (link) {
             link.click();
         } else {
-            // fallback: directly show modal
             showModal();
         }
         hideBackPopup();
     });
     
-    // When user clicks "OK, stay here"
     backOkBtn.addEventListener('click', () => {
         hideBackPopup();
     });
     
-    // Detect back button via popstate – show popup EVERY TIME regardless of clickedMemoryLink
+    // Intercept back button
     window.addEventListener('popstate', function(event) {
+        // Always show the custom popup – never allow normal back navigation
         showBackPopupAlways();
     });
     
     // --------------------------------------------------------------
-    // 4. BEFOREUNLOAD – ALWAYS show warning (even after link clicked)
+    // 4. RELOAD / CLOSE TAB WARNING (stronger)
     // --------------------------------------------------------------
     window.addEventListener('beforeunload', (event) => {
-        // Always show a reminder, even if they already clicked the link
-        const message = "💖 Don't leave without reading the special message one more time? Stay a little longer?";
+        // This will trigger a native browser dialog
+        const message = "⚠️ You haven't opened the special message. Stay on this page?";
         event.preventDefault();
-        event.returnValue = message;
-        return message;
+        event.returnValue = message;   // Standard for most browsers
+        return message;                // For older browsers
     });
+    
+    // Also warn if they try to refresh via keyboard (Ctrl+R / F5) – not possible to block, but beforeunload covers it.
     
     // --------------------------------------------------------------
     // 5. EXTRA: highlight floating reminder when mouse leaves top
@@ -537,7 +526,7 @@ and ippudu Inka chepalsindi undi but all those are timewaste for u🙂,it's ok..
         }
     });
     
-    console.log("Ready — back popup will appear every time you press back, and beforeunload always asks.");
+    console.log("Ready — back button, reload, and close tab are now intercepted.");
 </script>
 
 <!-- 
